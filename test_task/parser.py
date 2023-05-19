@@ -17,7 +17,8 @@ def get_soup(url):
 category_page = get_soup(main_url)
 all_categories = category_page.findAll('div',
                                        class_='Megamenustyled__MainCategoryItem-sc-k9lul0-0 hcJnLl '
-                                              'ui-library-gridItem-e24a ui-library-gridFlow-6fac ui-library-gridColumn-e638')
+                                              'ui-library-gridItem-e24a ui-library-gridFlow-6fac ui-library-'
+                                              'gridColumn-e638')
 
 data = {}
 
@@ -25,13 +26,13 @@ for category in all_categories[:3]:
     category_url = category.find('a', class_='ui-library-action-80bf ui-library-actionLink-ec77 '
                                              'ui-library-buttonRadiusDefault-be7f ui-library-blue06-ad90 '
                                              'MenuItemstyled__StyledMegaMenuLink-sc-gkys1m-0 bZICcD').get('href')
-    category_url = 'https://eldorado.ua' + category_url
+    category_uri = main_url + category_url
     category_data = []
-    subcategories = get_soup(category_url)
-    subb = subcategories.find('div', class_='image')
+    subcategories = get_soup(category_uri)
+    subb = subcategories.find('div', class_='SubCategorystyled__Container-sc-t4vzkk-1 uVwxs ui-library-gridItem-e24a')
     sub_links = []
 
-    for sub in subb.find_all('a'):
+    for sub in subb.find_all('a')[:1]:
         sub_link = sub.get('href')
         sub_links.append(sub_link)
         subcat_link = "https://eldorado.ua" + sub_link
@@ -48,6 +49,7 @@ for category in all_categories[:3]:
                     item_url = main_url + href_items
                     product_reviews = get_soup(item_url)
                     all_reviews = product_reviews.findAll('div', class_="comments-field")
+                    button = product_reviews.find('div', class_="load-more-comments-container")
                     title = product_reviews.find('span', class_='product-name').text
                     rv_without_tags = []
 
